@@ -1,16 +1,27 @@
 package dongzhong.okhttputil;
 
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+
 /**
- * OkHttp管理类-单例
+ * <p>OkHttp管理类-单例</p>
+ * <p>用于管理http请求</p>
  *
  * Created by dongzhong on 2018/2/5.
  */
 
 public class OkHttpManager {
+    public static final long CONNECT_TIMOUT = 60 * 1000L;
+    public static final long READ_TIMEOUT = 60 * 1000L;
+    public static final long WRITE_TIMEOUT = 60 * 1000L;
+
     private static OkHttpManager instance;
 
-    private OkHttpManager() {
+    private OkHttpClient okHttpClient;
 
+    private OkHttpManager() {
+        initOkHttpClient(null);
     }
 
     public static OkHttpManager getInstance() {
@@ -24,5 +35,30 @@ public class OkHttpManager {
             }
         }
         return instance;
+    }
+
+    public void initOkHttpClient(OkHttpClient okHttpClient) {
+        if (okHttpClient != null) {
+            this.okHttpClient = okHttpClient;
+        }
+        else {
+            this.okHttpClient = new OkHttpClient.Builder()
+                    .connectTimeout(CONNECT_TIMOUT, TimeUnit.MILLISECONDS)
+                    .readTimeout(READ_TIMEOUT, TimeUnit.MILLISECONDS)
+                    .writeTimeout(WRITE_TIMEOUT, TimeUnit.MILLISECONDS)
+                    .build();
+        }
+    }
+
+    /**
+     * 获取OkHttpClient
+     *
+     * @return
+     */
+    public OkHttpClient getOkHttpClient() {
+        if (okHttpClient == null) {
+            initOkHttpClient(null);
+        }
+        return okHttpClient;
     }
 }
