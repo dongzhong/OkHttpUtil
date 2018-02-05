@@ -86,8 +86,8 @@ public class RequestCall {
      * @throws IOException
      */
     public Response execute() throws IOException{
-        buildCall();
-        Response response = call.execute();
+        this.call = buildCall();
+        Response response = this.call.execute();
         return response;
     }
 }

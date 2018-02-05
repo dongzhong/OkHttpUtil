@@ -64,6 +64,7 @@ public class LogInterceptor implements Interceptor {
             if (headers != null && headers.size() > 0) {
                 logStringBuilder.append("headers: \n").append(headers.toString());
             }
+            LogUtil.d(TAG, logStringBuilder.toString());
         }
         catch (Exception e) {
 

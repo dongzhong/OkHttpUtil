@@ -42,7 +42,7 @@ public class GetRequestBuilder extends OkHttpRequestBuilder<GetRequestBuilder> i
     }
 
     @Override
-    RequestCall build() {
+    public RequestCall build() {
         appendParams();
         return new GetRequest(url, tag, params, headers, id).build();
     }
