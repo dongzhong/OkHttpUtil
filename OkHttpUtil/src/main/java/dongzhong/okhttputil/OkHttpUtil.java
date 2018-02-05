@@ -1,9 +1,15 @@
 package dongzhong.okhttputil;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import dongzhong.okhttputil.builder.GetRequestBuilder;
+import dongzhong.okhttputil.callback.Callback;
 import dongzhong.okhttputil.interceptor.LogInterceptor;
+import dongzhong.okhttputil.request.RequestCall;
+import okhttp3.Call;
 import okhttp3.OkHttpClient;
+import okhttp3.Response;
 
 /**
  * <p>OkHttp管理类-单例</p>
@@ -12,25 +18,25 @@ import okhttp3.OkHttpClient;
  * Created by dongzhong on 2018/2/5.
  */
 
-public class OkHttpManager {
+public class OkHttpUtil {
     public static final long CONNECT_TIMOUT = 60 * 1000L;
     public static final long READ_TIMEOUT = 60 * 1000L;
     public static final long WRITE_TIMEOUT = 60 * 1000L;
 
-    private static OkHttpManager instance;
+    private static OkHttpUtil instance;
 
     private OkHttpClient okHttpClient;
 
-    private OkHttpManager() {
+    private OkHttpUtil() {
         initOkHttpClient(null);
     }
 
-    public static OkHttpManager getInstance() {
+    public static OkHttpUtil getInstance() {
         if (instance == null) {
-            synchronized (OkHttpManager.class) {
+            synchronized (OkHttpUtil.class) {
                 if (instance == null) {
-                    synchronized (OkHttpManager.class) {
-                        instance = new OkHttpManager();
+                    synchronized (OkHttpUtil.class) {
+                        instance = new OkHttpUtil();
                     }
                 }
             }
@@ -62,5 +68,23 @@ public class OkHttpManager {
             initOkHttpClient(null);
         }
         return okHttpClient;
+    }
+
+    public GetRequestBuilder get() {
+        return new GetRequestBuilder();
+    }
+
+    public void execute(final RequestCall requestCall, final Callback callback) {
+        requestCall.getCall().enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onFailure(call, e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                callback.onResponse(call, response);
+            }
+        });
     }
 }
