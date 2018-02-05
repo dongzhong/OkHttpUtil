@@ -2,6 +2,7 @@ package dongzhong.okhttputil;
 
 import java.util.concurrent.TimeUnit;
 
+import dongzhong.okhttputil.interceptor.LogInterceptor;
 import okhttp3.OkHttpClient;
 
 /**
@@ -46,6 +47,7 @@ public class OkHttpManager {
                     .connectTimeout(CONNECT_TIMOUT, TimeUnit.MILLISECONDS)
                     .readTimeout(READ_TIMEOUT, TimeUnit.MILLISECONDS)
                     .writeTimeout(WRITE_TIMEOUT, TimeUnit.MILLISECONDS)
+                    .addInterceptor(new LogInterceptor())
                     .build();
         }
     }
