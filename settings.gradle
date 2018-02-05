@@ -1,1 +1,1 @@
-include ':OkHttpUtil'
+include ':OkHttpUtil', ':okhttputiltest'
