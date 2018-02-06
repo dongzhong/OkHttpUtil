@@ -19,19 +19,47 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/get_async_button"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#000"
-                android:text="Get Async" />
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/get_sync_button"
-                android:layout_width="wrap_content"
+                <Button
+                    android:id="@+id/get_async_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000"
+                    android:text="Get Async" />
+
+                <Button
+                    android:id="@+id/get_sync_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000"
+                    android:text="Get Sync" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#000"
-                android:text="Get Sync" />
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/post_string_async_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000"
+                    android:text="Post String Async" />
+
+                <Button
+                    android:id="@+id/post_string_sync_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000"
+                    android:text="Post String Async" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

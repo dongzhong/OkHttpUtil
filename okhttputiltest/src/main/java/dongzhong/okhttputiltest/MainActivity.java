@@ -17,6 +17,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView textView;
     private Button getAsyncButton;
     private Button getSyncButton;
+    private Button postStringAsyncButton;
+    private Button postStringSyncButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getAsyncButton.setOnClickListener(this);
         getSyncButton = (Button) findViewById(R.id.get_sync_button);
         getSyncButton.setOnClickListener(this);
+        postStringAsyncButton = (Button) findViewById(R.id.post_string_async_button);
+        postStringAsyncButton.setOnClickListener(this);
+        postStringSyncButton = (Button) findViewById(R.id.post_string_sync_button);
+        postStringSyncButton.setOnClickListener(this);
     }
 
     @Override
@@ -42,32 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .get()
                         .url("http://www.baidu.com")
                         .build()
-                        .execute(new Callback() {
-                            @Override
-                            public void onFailure(Call call, IOException e) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        textView.setText("请求错误");
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onResponse(Call call, final Response response) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            textView.setText(response.body().string());
-                                        }
-                                        catch (IOException e) {
-                                            textView.setText(e.getMessage());
-                                        }
-                                    }
-                                });
-                            }
-                        });
+                        .execute(callback);
                 break;
             case R.id.get_sync_button:
                 new Thread(new Runnable() {
@@ -79,15 +60,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     .url("http://www.baidu.com")
                                     .build()
                                     .execute();
+                            final String resultString = response.body().string();
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    try {
-                                        textView.setText(response.body().string());
-                                    }
-                                    catch (IOException e) {
-                                        textView.setText(e.getMessage());
-                                    }
+                                    textView.setText(resultString);
+                                }
+                            });
+                        }
+                        catch (final IOException e) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    textView.setText(e.getMessage());
+                                }
+                            });
+                        }
+                    }
+                }).start();
+                break;
+            case R.id.post_string_async_button:
+                OkHttpUtil.getInstance()
+                        .postString()
+                        .url("http://www.baidu.com")
+                        .content("测试测试测试")
+                        .build()
+                        .execute(callback);
+                break;
+            case R.id.post_string_sync_button:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            final Response response = OkHttpUtil.getInstance()
+                                    .postString()
+                                    .url("http://www.baidu.com")
+                                    .content("测试测试测试")
+                                    .build()
+                                    .execute();
+                            final String resultString = response.body().string();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    textView.setText(resultString);
                                 }
                             });
                         }
@@ -106,4 +121,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
+    private Callback callback = new Callback() {
+        @Override
+        public void onFailure(Call call, IOException e) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    textView.setText("请求错误");
+                }
+            });
+        }
+
+        @Override
+        public void onResponse(Call call, Response response) {
+            String responseString = "";
+            try {
+                responseString = response.body().string();
+            }
+            catch (Exception e) {
+                responseString = e.getMessage();
+            }
+            final String result = responseString;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    textView.setText(result);
+                }
+            });
+        }
+    };
 }

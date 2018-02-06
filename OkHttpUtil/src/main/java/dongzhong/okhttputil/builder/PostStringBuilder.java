@@ -8,7 +8,7 @@ import okhttp3.MediaType;
  * Created by dongzhong on 2018/2/6.
  */
 
-public class PostStringBuilder extends OkHttpRequestBuilder {
+public class PostStringBuilder extends OkHttpRequestBuilder<PostStringBuilder> {
     protected MediaType mediaType;
     protected String content;
 
@@ -23,7 +23,7 @@ public class PostStringBuilder extends OkHttpRequestBuilder {
     }
 
     @Override
-    RequestCall build() {
+    public RequestCall build() {
         return new PostStringRequest(url, tag, params, headers, content, mediaType, id).build();
     }
 }
