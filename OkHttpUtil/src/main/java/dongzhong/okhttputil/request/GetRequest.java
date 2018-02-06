@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import java.util.Map;
 
+import dongzhong.okhttputil.callback.Callback;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
@@ -19,6 +20,11 @@ public class GetRequest extends OkHttpRequest {
     @Override
     RequestBody generateRequestBody() {
         return null;
+    }
+
+    @Override
+    RequestBody wrapRequestBody(RequestBody requestBody, Callback callback) {
+        return requestBody;
     }
 
     @Override
