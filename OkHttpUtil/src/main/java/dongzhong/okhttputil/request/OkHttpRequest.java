@@ -63,9 +63,10 @@ public abstract class OkHttpRequest {
      *
      * @return
      */
-    public Request generateRequest() {
+    public Request generateRequest(Callback callback) {
         RequestBody requestBody = generateRequestBody();
-        Request request = buildRequest(requestBody);
+        RequestBody wrapedRequestBody = wrapRequestBody(requestBody, callback);
+        Request request = buildRequest(wrapedRequestBody);
         return request;
     }
 

@@ -43,16 +43,16 @@ public class RequestCall {
         return this;
     }
 
-    private Request generateRequest() {
-        return okHttpRequest.generateRequest();
+    private Request generateRequest(Callback callback) {
+        return okHttpRequest.generateRequest(callback);
     }
 
     public Call getCall() {
         return this.call;
     }
 
-    private Call buildCall() {
-        this.request = generateRequest();
+    private Call buildCall(Callback callback) {
+        this.request = generateRequest(callback);
         OkHttpClient client = OkHttpUtil.getInstance().getOkHttpClient();
         if (connectTimeOut > 0 || readTimeOut > 0 || writeTimeOut > 0) {
             connectTimeOut = connectTimeOut > 0 ? connectTimeOut : OkHttpUtil.CONNECT_TIMOUT;
@@ -75,7 +75,7 @@ public class RequestCall {
      * @param callback
      */
     public void execute(Callback callback) {
-        this.call = buildCall();
+        this.call = buildCall(callback);
         OkHttpUtil.getInstance().execute(this, callback);
     }
 
@@ -86,7 +86,7 @@ public class RequestCall {
      * @throws IOException
      */
     public Response execute() throws IOException{
-        this.call = buildCall();
+        this.call = buildCall(null);
         Response response = this.call.execute();
         return response;
     }
