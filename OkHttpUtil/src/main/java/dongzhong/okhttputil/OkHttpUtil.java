@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import dongzhong.okhttputil.builder.GetRequestBuilder;
+import dongzhong.okhttputil.builder.PostStringBuilder;
 import dongzhong.okhttputil.callback.Callback;
 import dongzhong.okhttputil.interceptor.LogInterceptor;
 import dongzhong.okhttputil.request.RequestCall;
@@ -72,6 +73,10 @@ public class OkHttpUtil {
 
     public GetRequestBuilder get() {
         return new GetRequestBuilder();
+    }
+
+    public PostStringBuilder postString() {
+        return new PostStringBuilder();
     }
 
     public void execute(final RequestCall requestCall, final Callback callback) {
