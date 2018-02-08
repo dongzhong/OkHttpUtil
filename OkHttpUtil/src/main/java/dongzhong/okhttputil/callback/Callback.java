@@ -15,4 +15,6 @@ public abstract class Callback {
     public abstract void onFailure(Call call, IOException e);
 
     public abstract void onResponse(Call call, Response response);
+
+    public abstract void onProgress(float progress, long total, int id);
 }
