@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button getSyncButton;
     private Button postStringAsyncButton;
     private Button postStringSyncButton;
+    private Button postFormAsyncButton;
+    private Button postFormSyncButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         postStringAsyncButton.setOnClickListener(this);
         postStringSyncButton = (Button) findViewById(R.id.post_string_sync_button);
         postStringSyncButton.setOnClickListener(this);
+        postFormAsyncButton = (Button) findViewById(R.id.post_form_async_button);
+        postFormAsyncButton.setOnClickListener(this);
+        postFormSyncButton = (Button) findViewById(R.id.post_form_sync_button);
+        postFormSyncButton.setOnClickListener(this);
     }
 
     @Override
@@ -96,6 +102,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     .postString()
                                     .url("http://www.baidu.com")
                                     .content("测试测试测试")
+                                    .build()
+                                    .execute();
+                            final String resultString = response.body().string();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    textView.setText(resultString);
+                                }
+                            });
+                        }
+                        catch (final IOException e) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    textView.setText(e.getMessage());
+                                }
+                            });
+                        }
+                    }
+                }).start();
+                break;
+            case R.id.post_form_async_button:
+                OkHttpUtil.getInstance()
+                        .postForm()
+                        .url("https://nlp.flwrobot.com/robot/ner/add.do")
+                        .addParam("sr_session", "")
+                        .addParam("ner_key", "name:location")
+                        .addParam("ner_value", "卧室:窗帘")
+                        .build()
+                        .execute(callback);
+                break;
+            case R.id.post_form_sync_button:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            final Response response = OkHttpUtil.getInstance()
+                                    .postForm()
+                                    .url("https://nlp.flwrobot.com/robot/ner/add.do")
+                                    .addParam("sr_session", "")
+                                    .addParam("ner_key", "name:location")
+                                    .addParam("ner_value", "卧室:窗帘")
                                     .build()
                                     .execute();
                             final String resultString = response.body().string();
