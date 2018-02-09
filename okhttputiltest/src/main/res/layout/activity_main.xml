@@ -82,6 +82,27 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/post_file_async_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000"
+                    android:text="Post File Async" />
+
+                <Button
+                    android:id="@+id/post_file_sync_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000"
+                    android:text="Post File Async" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

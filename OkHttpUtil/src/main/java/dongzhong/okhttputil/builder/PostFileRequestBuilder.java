@@ -12,7 +12,7 @@ import okhttp3.MediaType;
  * Created by dongzhong on 2018/2/8.
  */
 
-public class PostFileRequestBuilder extends OkHttpRequestBuilder<PostFormRequestBuilder> {
+public class PostFileRequestBuilder extends OkHttpRequestBuilder<PostFileRequestBuilder> {
     private File file;
     private MediaType mediaType;
 
@@ -21,8 +21,13 @@ public class PostFileRequestBuilder extends OkHttpRequestBuilder<PostFormRequest
         return this;
     }
 
+    public PostFileRequestBuilder mediaType(MediaType mediaType) {
+        this.mediaType = mediaType;
+        return this;
+    }
+
     @Override
-    RequestCall build() {
+    public RequestCall build() {
         return new PostFileRequest(url, tag, params, headers, file, mediaType, id).build();
     }
 }

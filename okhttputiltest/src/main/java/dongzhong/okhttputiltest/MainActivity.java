@@ -5,11 +5,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 
 import dongzhong.okhttputil.OkHttpUtil;
 import dongzhong.okhttputil.callback.Callback;
+import dongzhong.okhttputiltest.util.FileUtil;
 import okhttp3.Call;
 import okhttp3.Response;
 
@@ -21,6 +23,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button postStringSyncButton;
     private Button postFormAsyncButton;
     private Button postFormSyncButton;
+    private Button postFileAsyncButton;
+    private Button postFileSyncButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         postFormAsyncButton.setOnClickListener(this);
         postFormSyncButton = (Button) findViewById(R.id.post_form_sync_button);
         postFormSyncButton.setOnClickListener(this);
+        postFileAsyncButton = (Button) findViewById(R.id.post_file_async_button);
+        postFileAsyncButton.setOnClickListener(this);
+        postFileSyncButton = (Button) findViewById(R.id.post_file_sync_button);
+        postFileSyncButton.setOnClickListener(this);
     }
 
     @Override
@@ -165,6 +173,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }).start();
                 break;
+            case R.id.post_file_async_button:
+                OkHttpUtil.getInstance().postFile()
+                        .url("http://www.baidu.com")
+                        .file(FileUtil.uploadFile)
+                        .build()
+                        .execute(callback);
+                break;
+            case R.id.post_file_sync_button:
+                break;
             default:
                 break;
         }
@@ -197,6 +214,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     textView.setText(result);
                 }
             });
+        }
+
+        @Override
+        public void onProgress(float progress, long total, int id) {
+            Toast.makeText(MainActivity.this, "Progress: " + progress, Toast.LENGTH_SHORT);
         }
     };
 }
