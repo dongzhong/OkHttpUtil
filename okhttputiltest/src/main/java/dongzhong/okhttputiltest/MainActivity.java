@@ -16,6 +16,8 @@ import okhttp3.Call;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final String TAG = "test";
+
     private TextView textView;
     private Button getAsyncButton;
     private Button getSyncButton;
@@ -25,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button postFormSyncButton;
     private Button postFileAsyncButton;
     private Button postFileSyncButton;
+
+    private Button cancelButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         postFileAsyncButton.setOnClickListener(this);
         postFileSyncButton = (Button) findViewById(R.id.post_file_sync_button);
         postFileSyncButton.setOnClickListener(this);
+        cancelButton = (Button) findViewById(R.id.cancel_button);
+        cancelButton.setOnClickListener(this);
     }
 
     @Override
@@ -134,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.post_form_async_button:
                 OkHttpUtil.getInstance()
                         .postForm()
+                        .tag(TAG)
                         .url("https://nlp.flwrobot.com/robot/ner/add.do")
                         .addParam("sr_session", "")
                         .addParam("ner_key", "name:location")
@@ -181,6 +188,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .execute(callback);
                 break;
             case R.id.post_file_sync_button:
+                break;
+            case R.id.cancel_button:
+                OkHttpUtil.getInstance()
+                        .cancelTag(TAG);
                 break;
             default:
                 break;

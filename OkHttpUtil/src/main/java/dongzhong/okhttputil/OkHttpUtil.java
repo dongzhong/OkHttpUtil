@@ -10,6 +10,7 @@ import dongzhong.okhttputil.builder.PostStringBuilder;
 import dongzhong.okhttputil.callback.Callback;
 import dongzhong.okhttputil.interceptor.LogInterceptor;
 import dongzhong.okhttputil.request.RequestCall;
+import dongzhong.okhttputil.utils.LogUtil;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
@@ -22,6 +23,8 @@ import okhttp3.Response;
  */
 
 public class OkHttpUtil {
+    private static final String TAG = OkHttpUtil.class.getSimpleName();
+
     public static final long CONNECT_TIMOUT = 60 * 1000L;
     public static final long READ_TIMEOUT = 60 * 1000L;
     public static final long WRITE_TIMEOUT = 60 * 1000L;
@@ -101,5 +104,34 @@ public class OkHttpUtil {
                 callback.onResponse(call, response);
             }
         });
+    }
+
+    public void cancelTag(Object tag) {
+        int cancelNum = 0;
+        if (tag == null) {
+            for (Call call : okHttpClient.dispatcher().queuedCalls()) {
+                if (tag.equals(call.request().tag())) {
+                    call.cancel();
+                    cancelNum++;
+                }
+            }
+            for (Call call : okHttpClient.dispatcher().runningCalls()) {
+                if (tag.equals(call.request().tag())) {
+                    call.cancel();
+                    cancelNum++;
+                }
+            }
+        }
+        else {
+            for (Call call : okHttpClient.dispatcher().queuedCalls()) {
+                call.cancel();
+                cancelNum++;
+            }
+            for (Call call : okHttpClient.dispatcher().runningCalls()) {
+                call.cancel();
+                cancelNum++;
+            }
+        }
+        LogUtil.d(TAG, "取消的请求数量: " + cancelNum);
     }
 }
